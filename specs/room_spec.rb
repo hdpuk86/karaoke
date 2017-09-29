@@ -5,6 +5,9 @@ require_relative('../room')
 require_relative('../guest')
 require_relative('../playlist')
 require_relative('../song')
+require_relative('../bar')
+require_relative('../drink')
+
 
 class TestPlaylist < MiniTest::Test
 
@@ -31,8 +34,18 @@ class TestPlaylist < MiniTest::Test
 
     @playlist2 = Playlist.new(playlist2)
 
-    @room1 = Room.new(1, @playlist1, @guests, 10, 5)
-    @room2 = Room.new(1, @playlist2, @guests, 2, 5)
+    @drink1 = Drink.new("Beer", 3)
+    @drink2 = Drink.new("Wine", 4)
+    @drink3 = Drink.new("Cider", 2)
+    @drink4 = Drink.new("Vodka", 2)
+
+    @drinks_list = [@drink1, @drink2, @drink3, @drink4]
+
+    @bar1 = Bar.new(@drinks_list)
+    @bar2 = Bar.new(@drinks_list)
+
+    @room1 = Room.new(1, @playlist1, @guests, 10, 5, @bar1)
+    @room2 = Room.new(1, @playlist2, @guests, 2, 5, @bar2)
   end
 
   def test_number()
@@ -71,6 +84,13 @@ class TestPlaylist < MiniTest::Test
   def test_charge_guest_entry()
     @room1.charge_guest_entry(@guest1)
     assert_equal(95, @guest1.cash())
+  end
+
+  def test_buy_drink()
+    @room1.buy_drink(@guests[0], @bar1.drinks_list[0])
+    assert_equal(1, @bar1.total_sales())
+    assert_equal(3, @bar1.total_cash())
+    assert_equal(97, @guest1.cash())
   end
 
 end

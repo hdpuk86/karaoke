@@ -1,15 +1,16 @@
 class Room
 
   attr_reader :number
-  attr_accessor :space, :entry_fee
+  attr_accessor :capacity, :entry_fee
 
-  def initialize(number, playlist, guests, space, entry_fee)
+  def initialize(number, playlist, guests, capacity, entry_fee, bar)
     @number = number
     @playlist = playlist
     @guests = guests
-    @space = space
+    @capacity = capacity
     @entry_fee = entry_fee
     @entry_cash_total = 0
+    @bar = bar
   end
 
   def guests()
@@ -17,10 +18,10 @@ class Room
   end
 
   def add_guest(new_guest)
-    if @guests.length() < @space
+    if @guests.length() < @capacity
       charge_guest_entry(new_guest)
       @guests << new_guest
-    elsif @guests.length() >= @space
+    elsif @guests.length() >= @capacity
       return "Sorry, room full"
     end
   end
@@ -45,21 +46,10 @@ class Room
     return @guests.length()
   end
 
-  # def music_fan?(guest)
-  #   for song in @playlist
-  #     if song == guest.fave_song
-  #       return "Whoop!"
-  #     end
-  #   end
-  # end
-
-  def music_fan(guest)
-    song = guest.fave_song()
-    if @playlist.find_song(song) == true
-      return "Whoop!"
-    else
-      return ":("
-    end
+  def buy_drink(guest, drink)
+    @bar.update_cash(drink.price())
+    @bar.update_sales(1)
+    guest.take_cash(drink.price())
   end
 
 end
