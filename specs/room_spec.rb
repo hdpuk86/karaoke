@@ -12,9 +12,10 @@ require_relative('../drink')
 class TestPlaylist < MiniTest::Test
 
   def setup
-    @guest1 = Guest.new("Hayley", 100, @song2)
-    @guest2 = Guest.new("Bob", 20, @song4)
-    @guest3 = Guest.new("Harry", 500, @song5)
+    @guest1 = Guest.new("Hayley", 100, "The Good Fight")
+    @guest2 = Guest.new("Leo", 100, "She's a Riot")
+    @guest3 = Guest.new("Harry", 500, "Waves")
+    @guest4 = Guest.new("Bob", 2, "Funeral")
 
     @guests = [@guest1, @guest2]
 
@@ -58,9 +59,10 @@ class TestPlaylist < MiniTest::Test
 
   def test_add_guest()
     @room1.add_guest(@guest3)
-    assert_equal([@guest1, @guest2, @guest3], @room1.guests())
+    assert_equal(3, @room1.guests.length())
     assert_equal(495, @guest3.cash())
-    assert_equal("Sorry, room full", @room2.add_guest(@guest3))
+    assert_equal("Sorry, that room is full", @room2.add_guest(@guest3))
+    assert_equal("Leo is not enjoying the music", @room1.add_guest(@guest2))
   end
 
   def test_remove_guest()
@@ -83,14 +85,24 @@ class TestPlaylist < MiniTest::Test
 
   def test_charge_guest_entry()
     @room1.charge_guest_entry(@guest1)
+    actual = @room1.charge_guest_entry(@guest4)
     assert_equal(95, @guest1.cash())
+    assert_equal("Sorry Bob cannot afford to get in", actual)
+
   end
 
   def test_buy_drink()
     @room1.buy_drink(@guests[0], @bar1.drinks_list[0])
+    @room1.buy_drink(@guest4, @bar1.drinks_list[1])
     assert_equal(1, @bar1.total_sales())
     assert_equal(3, @bar1.total_cash())
     assert_equal(97, @guest1.cash())
+  end
+
+  def test_like_music()
+    actual = @room1.like_music(@guest1)
+    expected = "Hayley loves the music"
+    assert_equal(expected, actual)
   end
 
 end

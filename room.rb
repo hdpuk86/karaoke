@@ -21,13 +21,18 @@ class Room
     if @guests.length() < @capacity
       charge_guest_entry(new_guest)
       @guests << new_guest
+      like_music(new_guest)
     elsif @guests.length() >= @capacity
-      return "Sorry, room full"
+      return "Sorry, that room is full"
     end
   end
 
   def charge_guest_entry(guest)
-    guest.take_cash(@entry_fee)
+    if guest.cash() < @entry_fee
+      return "Sorry #{guest.name()} cannot afford to get in"
+    else
+      guest.take_cash(@entry_fee)
+    end
   end
 
   def remove_guest(guest)
@@ -47,9 +52,23 @@ class Room
   end
 
   def buy_drink(guest, drink)
-    @bar.update_cash(drink.price())
-    @bar.update_sales(1)
-    guest.take_cash(drink.price())
+    if guest.cash() >= drink.price()
+      @bar.update_cash(drink.price())
+      @bar.update_sales(1)
+      guest.take_cash(drink.price())
+    else
+      puts "Sorry #{guest.name()} cannot afford a #{drink.name()}"
+    end
+  end
+
+  def like_music(guest)
+    fave_song = guest.fave_song()
+    find_song = @playlist.find_song(fave_song)
+    if find_song == true
+      return "#{guest.name()} loves the music"
+    else
+      return "#{guest.name()} is not enjoying the music"
+    end
   end
 
 end

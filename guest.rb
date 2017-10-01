@@ -7,6 +7,7 @@ class Guest
       @name = name
       @cash = cash
       @fave_song = fave_song
+      @current_room = 0
   end
 
   def take_cash(amount)
