@@ -63,12 +63,23 @@ class Room
 
   def like_music(guest)
     fave_song = guest.fave_song()
-    find_song = @playlist.find_song(fave_song)
+    find_song = @playlist.find_song(fave_song.title())
     if find_song == true
       return "#{guest.name()} loves the music"
     else
       return "#{guest.name()} is not enjoying the music"
     end
   end
+
+  # def like_music(guest)
+  #   fave_song = guest.fave_song()
+  #   for song in @playlist.playlist()
+  #     if song.title() == fave_song.title()
+  #       return "Woo!"
+  #     else
+  #       return "This music sucks!"
+  #     end
+  #   end
+  # end
 
 end

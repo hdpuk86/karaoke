@@ -12,28 +12,25 @@ require_relative('../drink')
 class TestPlaylist < MiniTest::Test
 
   def setup
-    @guest1 = Guest.new("Hayley", 100, "The Good Fight")
-    @guest2 = Guest.new("Leo", 100, "She's a Riot")
-    @guest3 = Guest.new("Harry", 500, "Waves")
-    @guest4 = Guest.new("Bob", 2, "Funeral")
-
-    @guests = [@guest1, @guest2]
-
     @song1 = Song.new("The Good Fight", "Gang of Youths")
     @song2 = Song.new("Sucker", "The Big Moon")
     @song3 = Song.new("Drive You Mad", "Amy Shark")
-
-    playlist1 = [@song1, @song2, @song3]
-
-    @playlist1 = Playlist.new(playlist1)
-
     @song4 = Song.new("Funeral", "Band of Horses")
     @song5 = Song.new("Waves", "Dean Lewis")
     @song6 = Song.new("Shes's a Riot", "The Jungle Giants")
 
-    playlist2 = [@song4, @song5, @song6]
+    playlist1 = [@song1, @song2, @song3]
+    @playlist1 = Playlist.new(playlist1)
 
+    playlist2 = [@song4, @song5, @song6]
     @playlist2 = Playlist.new(playlist2)
+
+    @guest1 = Guest.new("Hayley", 100, @song1)
+    @guest2 = Guest.new("Leo", 100, @song6)
+    @guest3 = Guest.new("Harry", 500, @song5)
+    @guest4 = Guest.new("Bob", 2, @song1)
+
+    @guests = [@guest1, @guest2]
 
     @drink1 = Drink.new("Beer", 3)
     @drink2 = Drink.new("Wine", 4)
@@ -104,5 +101,10 @@ class TestPlaylist < MiniTest::Test
     expected = "Hayley loves the music"
     assert_equal(expected, actual)
   end
+
+  # def test_like_music()
+  #   actual = @room1.like_music(@guest4)
+  #   assert_equal("Woo!", actual)
+  # end
 
 end
